@@ -9,6 +9,8 @@ namespace MySqlDemo.Persistence
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Car> Cars { get; set; }
         public DbSet<Color> Colors { get; set; }
+        public DbSet<CarsColors> CarsColors { get; set; }
+
 
         public CarDbContext(DbContextOptions<CarDbContext> options)
             :base(options)
@@ -54,6 +56,14 @@ namespace MySqlDemo.Persistence
 
             modelBuilder.Entity<Car>().Navigation(e => e.Brand).AutoInclude();
             modelBuilder.Entity<Car>().Navigation(e => e.Color).AutoInclude();
+
+
+            modelBuilder
+           .Entity<CarsColors>(eb =>
+           {
+               eb.HasNoKey();
+               eb.ToView("VW_Cars_And_Colors");
+           });
         }
     }
 }
