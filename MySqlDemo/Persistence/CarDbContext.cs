@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MySqlDemo.Models;
+using System.Diagnostics;
 
 namespace MySqlDemo.Persistence
 {
@@ -38,6 +39,21 @@ namespace MySqlDemo.Persistence
             modelBuilder.Entity<Brand>().HasData(listBrands);
             modelBuilder.Entity<Color>().HasData(listColors);
             modelBuilder.Entity<Car>().HasData(listCars);
+
+
+            modelBuilder.Entity<Car>()
+            .HasOne<Color>(c => c.Color)
+            .WithMany(cl => cl.Cars)
+            .HasForeignKey(c => c.ColorId);
+
+            modelBuilder.Entity<Car>()
+            .HasOne<Brand>(c => c.Brand)
+            .WithMany(b => b.Cars)
+            .HasForeignKey(c => c.BrandId);
+
+
+            modelBuilder.Entity<Car>().Navigation(e => e.Brand).AutoInclude();
+            modelBuilder.Entity<Car>().Navigation(e => e.Color).AutoInclude();
         }
     }
 }
